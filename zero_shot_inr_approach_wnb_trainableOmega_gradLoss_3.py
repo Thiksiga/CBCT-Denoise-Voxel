@@ -429,17 +429,17 @@ def _build_overlapping_range_poisson_distribution(
         start += step
 
     if not merged_distribution:
-        flat = img_offset.reshape(-1).astype(np.float64)
+        flat = img_offset.reshape(-1).astype(np.float32)
         unique_values, counts = np.unique(flat, return_counts=True)
-        probabilities = counts.astype(np.float64) / counts.sum()
+        probabilities = counts.astype(np.float32) / counts.sum()
         return dict(zip(unique_values.tolist(), probabilities.tolist())), l_b, u_b
 
     distribution_sorted = {k: merged_distribution[k] for k in sorted(merged_distribution)}
     total_probability = sum(distribution_sorted.values())
     if not np.isfinite(total_probability) or total_probability <= 0:
-        flat = img_offset.reshape(-1).astype(np.float64)
+        flat = img_offset.reshape(-1).astype(np.float32)
         unique_values, counts = np.unique(flat, return_counts=True)
-        probabilities = counts.astype(np.float64) / counts.sum()
+        probabilities = counts.astype(np.float32) / counts.sum()
         return dict(zip(unique_values.tolist(), probabilities.tolist())), l_b, u_b
 
     distribution_sorted = {k: v / total_probability for k, v in distribution_sorted.items()}
@@ -448,8 +448,8 @@ def _build_overlapping_range_poisson_distribution(
 
 def _generate_custom_poisson_noise(distribution_sorted, shape, seed=42):
     rng = np.random.default_rng(seed)
-    keys = np.array(list(distribution_sorted.keys()), dtype=np.float64)
-    values = np.array(list(distribution_sorted.values()), dtype=np.float64)
+    keys = np.array(list(distribution_sorted.keys()), dtype=np.float32)
+    values = np.array(list(distribution_sorted.values()), dtype=np.float32)
     values_normalized = values / values.sum()
     noise_flat = rng.choice(keys, size=np.prod(shape), p=values_normalized)
     return noise_flat.reshape(shape)
@@ -461,7 +461,7 @@ def _generate_random_noise(shape, l_b, u_b, seed=42):
 
 
 def _transform_and_rescale_noise(combined_noise, u_b, l_b):
-    combined_noise = np.asarray(combined_noise, dtype=np.float64)
+    combined_noise = np.asarray(combined_noise, dtype=np.float32)
     max_val = np.max(combined_noise)
     combined_log = u_b - np.log(combined_noise / max_val + 1e-12)
     rescaled = u_b - combined_log
@@ -547,7 +547,7 @@ def build_global_noise_reference(
 
 def _compute_pdf_np(data, bins=100, data_range=None, eps=1e-12):
     hist, bin_edges = np.histogram(data, bins=bins, range=data_range, density=False)
-    pdf = hist.astype(np.float64)
+    pdf = hist.astype(np.float32)
     pdf /= np.sum(pdf) + eps
     pdf = np.clip(pdf, eps, None)
     pdf /= np.sum(pdf)
@@ -555,8 +555,8 @@ def _compute_pdf_np(data, bins=100, data_range=None, eps=1e-12):
 
 
 def _js_divergence_np(P, Q, eps=1e-12):
-    P = np.clip(np.asarray(P, dtype=np.float64), eps, None)
-    Q = np.clip(np.asarray(Q, dtype=np.float64), eps, None)
+    P = np.clip(np.asarray(P, dtype=np.float32), eps, None)
+    Q = np.clip(np.asarray(Q, dtype=np.float32), eps, None)
     P = P / P.sum()
     Q = Q / Q.sum()
     M = 0.5 * (P + Q)
