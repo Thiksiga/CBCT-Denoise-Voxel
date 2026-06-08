@@ -1,0 +1,36 @@
+# Visual Studio
+.vs/
+*.user
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Weights and Biases (wandb)
+wandb/
+
+# Checkpoints and Models
+*.pth
+checkpoint.pth
+
+# Data and Script Outputs
+*.npy
+activation_maps/
+omega_tracked*.png
+system_resources*.png
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# OS generated files
+.DS_Store
+Thumbs.db

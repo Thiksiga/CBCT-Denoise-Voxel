@@ -66,8 +66,8 @@ wandb.login(key=WANDB_API_KEY, relogin=True)
 _DEFAULT_INPUT = r"/projects1/Toothfairy/ToothFairy_Dataset/Dataset/Dataset/P10/data.npy"
 
 wandb.init(
-    project="zero-shot-inr_2",
-    name=f"SIREN_zero_shot_2_MSE_gradLoss_removed0.05_20steps{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
+    project="zero-shot-inr",
+    name=f"SIREN_zero_shot_2_MSE_gradLoss_50steps_halfPrecision{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
     config={
         # Model
         "architecture": "SIREN",
@@ -97,13 +97,13 @@ wandb.init(
         "noise_rescale_transform": "log_rescale_original_noise_modeling",
         "activation_snapshot_log_js": True,
         "loss_mse_weight": 1.0,
-        "loss_grad_weight": 0.0,
+        "loss_grad_weight": 1.0,
         # Keep direct output-vs-synthetic-noise terms disabled for denoising.
         # Synthetic noise should describe the residual removed from the patch,
         # not the generated clean estimate.
-        "loss_noise_mse_weight": 1.0,
+        "loss_noise_mse_weight": 0.0,
         "loss_noise_js_weight": 0,
-        "loss_tv_weight": 0, #1e-5,
+        "loss_tv_weight": 1e-5,
         "loss_residual_noise_js_weight": 0.001, #0.001,
         "noise_model_a": 1.0,
         "noise_model_b": 0.01,
