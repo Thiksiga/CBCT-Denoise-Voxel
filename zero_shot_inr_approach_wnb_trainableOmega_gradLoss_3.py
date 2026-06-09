@@ -67,11 +67,12 @@ _DEFAULT_INPUT = r"/projects1/Toothfairy/ToothFairy_Dataset/Dataset/Dataset/P10/
 
 wandb.init(
     project="zero-shot-inr",
-    name=f"SIREN_zero_shot_2_MSE_gradLoss_50steps_halfPrecision{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
+    name=f"SIREN_zero_shot_2_MSE_gradLoss_20steps_halfPrecision{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
     config={
         # Model
         "architecture": "SIREN",
         "training_mode": "zero_shot",
+        "comit": "steps20 mse_grad_tv_noiseJS half precision"
         "hidden_features": 256,
         "hidden_layers": 3,
         "outermost_linear": True,
@@ -111,7 +112,7 @@ wandb.init(
         "noise_model_overlap_ratio": 0.05,
         "noise_model_bins": 100,
         "noise_model_seed": 42,
-        "total_steps": 50,
+        "total_steps": 20,
         "steps_til_summary": 10,
         # Logging — hardware
         "log_hardware_every": 1,
