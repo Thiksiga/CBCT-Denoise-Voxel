@@ -72,7 +72,7 @@ wandb.init(
         # Model
         "architecture": "SIREN",
         "training_mode": "zero_shot",
-        "comit": "steps20 mse_grad_tv_noiseJS half precision"
+        "comit": "steps20 mse_grad_tv_noiseJS half precision",
         "hidden_features": 256,
         "hidden_layers": 3,
         "outermost_linear": True,
