@@ -40,6 +40,7 @@ from captum.attr import IntegratedGradients, LayerActivation
 from monai.data.utils import dense_patch_slices
 from monai.inferers import sliding_window_inference
 from PIL import Image
+from brisque import BRISQUE
 from skimage.metrics import structural_similarity as ssim
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
@@ -72,7 +73,7 @@ wandb.init(
         # Model
         "architecture": "SIREN",
         "training_mode": "zero_shot",
-        "comit": "steps20 mse_grad_tv_noiseJS half precision",
+        "comit": "half precision with BRISQUE added",
         "hidden_features": 256,
         "hidden_layers": 3,
         "outermost_linear": True,
@@ -88,7 +89,7 @@ wandb.init(
         # Optimisation
         "learning_rate": 1e-5,
         "optimizer": "Adam",  # Adam | AdamW | SGD
-        "loss_function": "mse + NoiseLoss", #"mse + gradLoss + tv + residualNoiseJS",
+        "loss_function": "mse + Grad", #"mse + gradLoss + tv + residualNoiseJS",
         "denoising_strategy": "INR clean estimate", #"INR clean estimate + TV + residual noise distribution matching",
         "synthetic_noise_target": "residual",
         "synthetic_noise_direct_output_loss_enabled": False,
@@ -104,8 +105,8 @@ wandb.init(
         # not the generated clean estimate.
         "loss_noise_mse_weight": 0.0,
         "loss_noise_js_weight": 0,
-        "loss_tv_weight": 1e-5,
-        "loss_residual_noise_js_weight": 0.001, #0.001,
+        "loss_tv_weight": 0, #1e-5,
+        "loss_residual_noise_js_weight": 0, #0.001,
         "noise_model_a": 1.0,
         "noise_model_b": 0.01,
         "noise_model_hu_bin_width": 200,
@@ -2018,12 +2019,21 @@ print("img max:", img_np.max())
 score, diff = ssim(recon_np, img_np, data_range=2, full=True, channel_axis=2)
 print("SSIM Score:", score)
 
+#Calculate BRISQUE score
+brisque_ori = BRISQUE(url=False)
+brisque_ori.score(img=img_np)
+
+brisque_recon = BRISQUE(url=False)
+brisque_recon.score(img=recon_np)
+
 wandb.log({
     "metrics/ssim": score,
     "metrics/recon_min": float(recon_np.min()),
     "metrics/recon_max": float(recon_np.max()),
     "metrics/img_min": float(img_np.min()),
     "metrics/img_max": float(img_np.max()),
+    "metrics/brisque_ori": float(brisque_ori.score(img=recon_np)),
+    "metrics/brisque_recon": float(brisque_recon.score(img=recon_np)),
 })
 
 print("======LPIPS Score=======")
