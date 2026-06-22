@@ -68,12 +68,12 @@ _DEFAULT_INPUT = r"/projects1/Toothfairy/ToothFairy_Dataset/Dataset/Dataset/P10/
 
 wandb.init(
     project="zero-shot-inr",
-    name=f"SIREN_zero_shot_2_MSE_gradLoss_20steps_halfPrecision{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
+    name=f"SIREN_zero_shot_halfPrecision{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
     config={
         # Model
         "architecture": "SIREN",
         "training_mode": "zero_shot",
-        "comit": "half precision with BRISQUE added",
+        "comit": "Trainable Omega WandB tracking enabled half precision with BRISQUE added",
         "hidden_features": 256,
         "hidden_layers": 3,
         "outermost_linear": True,
