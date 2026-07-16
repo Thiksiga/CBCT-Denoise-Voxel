@@ -39,47 +39,47 @@ wandb.init(
 project="zero-shot-inr",
 name=f"SIREN_zero_shot_2_MSE_gradLoss_{os.path.splitext(os.path.basename(_DEFAULT_INPUT))[0]}",
 config={
-    "architecturesere": "SIREN",
-    "training_mode": "zero_shot",
-    "hidden_features": 256,
-    "hidden_layers": 3,
-    "outermost_linear": True,
-    "first_omega_0": 60,
-    "hidden_omega_0": 60,
-    "input_data_name": _DEFAULT_INPUT,
-    "patch_size": [32, 32, 32],
-    "stride": [16, 16, 16],
-    "learning_rate": 1e-5,
-    "optimizer": "Adam",
-    "loss_mse_weight": 1.0,
-    "loss_grad_weight": 1.0,
-    "loss_noise_mse_weight": 0.0,
-    "loss_noise_js_weight": 0.0,
-    "loss_tv_weight": 1e-5,
-    "loss_residual_noise_js_weight": 0.001,
-    "noise_model_a": 1.0,
-    "noise_model_b": 0.01,
-    "noise_model_hu_bin_width": 200,
-    "noise_model_overlap_ratio": 0.05,
-    "noise_model_bins": 100,
-    "noise_model_seed": 42,
-    "total_steps": 50,
-    "steps_til_summary": 10,
-    "gpu_device_index": 0,
-    "activation_snapshot_num_patches": 50,
-    "activation_num_neurons_to_log": 50,
-    "activation_log_seed": 42,
-    "activation_slice_axis": 2,
-    "activation_slice_idx": None,
-    "activation_maps_dir": "activation_maps",
-    "activation_log_wandb_images": False,
-    "activation_log_montage": True,
-    "activation_wandb_batch_size": 32,
-    "activation_log_artifact": False,
-    "activation_snapshot_log_js": True,
-    "omega_track_seed": 42,
-    "omega_plot_path": "omega_tracked.png",
-    "system_plot_path": "system_resources.png",
+"architecturesere": "SIREN",
+"training_mode": "zero_shot",
+"hidden_features": 256,
+"hidden_layers": 3,
+"outermost_linear": True,
+"first_omega_0": 60,
+"hidden_omega_0": 60,
+"input_data_name": _DEFAULT_INPUT,
+"patch_size": [32, 32, 32],
+"stride": [16, 16, 16],
+"learning_rate": 1e-5,
+"optimizer": "Adam",
+"loss_mse_weight": 1.0,
+"loss_grad_weight": 1.0,
+"loss_noise_mse_weight": 0.0,
+"loss_noise_js_weight": 0.0,
+"loss_tv_weight": 1e-5,
+"loss_residual_noise_js_weight": 0.001,
+"noise_model_a": 1.0,
+"noise_model_b": 0.01,
+"noise_model_hu_bin_width": 200,
+"noise_model_overlap_ratio": 0.05,
+"noise_model_bins": 100,
+"noise_model_seed": 42,
+"total_steps": 50,
+"steps_til_summary": 10,
+"gpu_device_index": 0,
+"activation_snapshot_num_patches": 50,
+"activation_num_neurons_to_log": 50,
+"activation_log_seed": 42,
+"activation_slice_axis": 2,
+"activation_slice_idx": None,
+"activation_maps_dir": "activation_maps",
+"activation_log_wandb_images": False,
+"activation_log_montage": True,
+"activation_wandb_batch_size": 32,
+"activation_log_artifact": False,
+"activation_snapshot_log_js": True,
+"omega_track_seed": 42,
+"omega_plot_path": "omega_tracked.png",
+"system_plot_path": "system_resources.png",
 },
 )
 cfg = wandb.config
@@ -125,11 +125,11 @@ def get_hardware_metrics(device_index=0):
         metrics["system/compute_device"] = "cpu"
     return metrics
 
-    SYSTEM_HISTORY_KEYS = ("system/ram_used_gb", "system/ram_percent", "system/process_rss_gb", "system/gpu_utilization_percent", "system/gpu_memory_used_gb", "system/gpu_memory_allocated_gb", "system/gpu_memory_utilization_percent")
-    def new_system_history(): return {key: [] for key in SYSTEM_HISTORY_KEYS} | {"_steps": []}
-    def append_system_history(history, metrics, global_step):
-        history["_steps"].append(global_step)
-        for key in SYSTEM_HISTORY_KEYS: history[key].append(metrics.get(key, float("nan")))
+SYSTEM_HISTORY_KEYS = ("system/ram_used_gb", "system/ram_percent", "system/process_rss_gb", "system/gpu_utilization_percent", "system/gpu_memory_used_gb", "system/gpu_memory_allocated_gb", "system/gpu_memory_utilization_percent")
+def new_system_history(): return {key: [] for key in SYSTEM_HISTORY_KEYS} | {"_steps": []}
+def append_system_history(history, metrics, global_step):
+    history["_steps"].append(global_step)
+    for key in SYSTEM_HISTORY_KEYS: history[key].append(metrics.get(key, float("nan")))
 
 def sample_activation_snapshots(num_patches, total_steps, num_snapshot_patches, seed):
     rng = random.Random(seed)
