@@ -125,9 +125,3 @@ def collect_initial_omega_values(model: nn.Module):
     layers = get_sine_layers(model)
     return {f"omega_initial/layer_{i}": layer.omega_0.detach().item() for i, layer in enumerate(layers)}
 
-omega_initial_values = collect_initial_omega_values(img_siren)
-wandb.config.update(omega_initial_values, allow_val_change=True)
-
-log_dict = {"train/loss": loss.item()}
-log_dict.update(collect_omega_metrics(img_siren, tracked_omega_layer_idx))
-wandb.log(log_dict, step=global_step)

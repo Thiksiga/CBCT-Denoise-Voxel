@@ -267,6 +267,8 @@ def main():
     global_start = time.perf_counter()
     processes_patches = []
 
+    
+
     for patch_idx, img_patch in enumerate(patches):
         patch = img_patch['patch']
         H, D, W = patch.shape
@@ -317,6 +319,13 @@ def main():
             if step % cfg.steps_til_summary == 0:
                 wandb.log({"train/loss": loss.item()})
                 print(f"[Patch {patch_idx+1:03d}] Step {step:04d}/{cfg.total_steps} | Loss: {loss.item():.6f}")
+            
+            omega_initial_values = collect_initial_omega_values(img_siren)
+            wandb.config.update(omega_initial_values, allow_val_change=True)
+
+            log_dict = {"train/loss": loss.item()}
+            log_dict.update(collect_omega_metrics(img_siren, tracked_omega_layer_idx))
+            wandb.log(log_dict, step=global_step)
 
         processes_patches.append({"patch": model_output.squeeze(-1).reshape(H, D, W), "slice": img_patch['slice']})
 
