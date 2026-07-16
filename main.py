@@ -128,8 +128,8 @@ def get_hardware_metrics(device_index=0):
     SYSTEM_HISTORY_KEYS = ("system/ram_used_gb", "system/ram_percent", "system/process_rss_gb", "system/gpu_utilization_percent", "system/gpu_memory_used_gb", "system/gpu_memory_allocated_gb", "system/gpu_memory_utilization_percent")
     def new_system_history(): return {key: [] for key in SYSTEM_HISTORY_KEYS} | {"_steps": []}
     def append_system_history(history, metrics, global_step):
-    history["_steps"].append(global_step)
-    for key in SYSTEM_HISTORY_KEYS: history[key].append(metrics.get(key, float("nan")))
+        history["_steps"].append(global_step)
+        for key in SYSTEM_HISTORY_KEYS: history[key].append(metrics.get(key, float("nan")))
 
 def sample_activation_snapshots(num_patches, total_steps, num_snapshot_patches, seed):
     rng = random.Random(seed)
