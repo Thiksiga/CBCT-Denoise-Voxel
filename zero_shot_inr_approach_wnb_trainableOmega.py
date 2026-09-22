@@ -2025,7 +2025,7 @@ print("SSIM Score:", score)
 
 #brisque_recon = BRISQUE(url=False)
 #brisque_recon.score(img=recon_np)
-/
+
 
 wandb.log({
     "metrics/ssim": score,
