@@ -96,17 +96,50 @@ class CustomNoiseModel:
         if l_b is None: l_b = self.l_b
         if u_b is None: u_b = self.u_b
             
-        combined_log = u_b - (np.log(combined_noise / np.max(combined_noise)))
+        #combined_log = u_b - (np.log(combined_noise / np.max(combined_noise)))
+
+        #print(
+        #   f"combined_log --> min: {np.min(combined_log):.2f}, "
+        #   f"max: {np.max(combined_log):.2f}, "
+        #   f"mean: {np.mean(combined_log):.2f}, "
+        #   f"std: {np.std(combined_log):.2f}"
+        #)
+
+        I_I0 = (np.min(combined_noise) / combined_noise)
+        print(
+            f"I_I0 --> min: {np.min(I_I0)}, "
+            f"max: {np.max(I_I0)}, "
+            f"mean: {np.mean(I_I0)}, "
+            f"std: {np.std(I_I0)}"
+        )
+        if l_b < 5: # Assumed that below -700HU in original image belongs to air/vacume region
+            combined_log =  u_b + (np.log(I_I0))
+        else:
+            combined_log = - np.log(I_I0)
+        # combined_log = np.log(1 + ((mean + combined_noise) / img_offset))
 
         print(
-            f"combined_log --> min: {np.min(combined_log):.2f}, "
-            f"max: {np.max(combined_log):.2f}, "
-            f"mean: {np.mean(combined_log):.2f}, "
-            f"std: {np.std(combined_log):.2f}"
+            f"combined_log --> min: {np.min(combined_log)}, "
+            f"max: {np.max(combined_log)}, "
+            f"mean: {np.mean(combined_log)}, "
+            f"std: {np.std(combined_log)}"
         )
 
-        rescaled = combined_noise
+        # rescaled = (((u_b - combined_log) / (1)))
+        rescaled = combined_log
+
+        # rescaled = combined_noise
         rescaled_offset = (rescaled - np.min(rescaled))
+
+        print(
+            f"rescaled_offset --> min: {np.min(rescaled_offset)}, "
+            f"max: {np.max(rescaled_offset)}, "
+            f"mean: {np.mean(rescaled_offset)}, "
+            f"std: {np.std(rescaled_offset)}"
+        )
+
+        #rescaled = combined_noise
+        #rescaled_offset = (rescaled - np.min(rescaled))
 
         rescaled_offset_final = (
             rescaled_offset *

@@ -73,7 +73,7 @@ wandb.init(
         # Model
         "architecture": "SIREN",
         "training_mode": "zero_shot",
-        "comit": "Trainable Omega WandB tracking enabled half precision with BRISQUE added",
+        "comit": "test_loss_mse_alone",
         "hidden_features": 256,
         "hidden_layers": 3,
         "outermost_linear": True,
@@ -89,7 +89,7 @@ wandb.init(
         # Optimisation
         "learning_rate": 1e-5,
         "optimizer": "Adam",  # Adam | AdamW | SGD
-        "loss_function": "mse + Grad", #"mse + gradLoss + tv + residualNoiseJS",
+        "loss_function": "mse", #"mse + gradLoss + tv + residualNoiseJS",
         "denoising_strategy": "INR clean estimate", #"INR clean estimate + TV + residual noise distribution matching",
         "synthetic_noise_target": "residual",
         "synthetic_noise_direct_output_loss_enabled": False,
@@ -99,7 +99,7 @@ wandb.init(
         "noise_rescale_transform": "log_rescale_original_noise_modeling",
         "activation_snapshot_log_js": True,
         "loss_mse_weight": 1.0,
-        "loss_grad_weight": 1.0,
+        "loss_grad_weight": 0.0,#1.0
         # Keep direct output-vs-synthetic-noise terms disabled for denoising.
         # Synthetic noise should describe the residual removed from the patch,
         # not the generated clean estimate.
